@@ -189,18 +189,16 @@
   <div class="chat-container">
     <!-- Left Panel: Contact List -->
     <div class="contact-list">
-      <div class="contact-item" data-contact="michael">
-        <img src="michael.png" alt="Michael">
-        <span>Michael</span>
-      </div>
-      <div class="contact-item" data-contact="jesse">
-        <img src="jesse.png" alt="Jesse">
-        <span>Jesse</span>
-      </div>
-      <div class="contact-item" data-contact="mark">
-        <img src="mark.png" alt="Mark">
-        <span>Mark</span>
-      </div>
+         <div class="contact-item" data-contact="ben">
+    <img src="ben.png" alt="Ben">
+    <span>Ben</span>
+  </div>
+  
+  <div class="contact-item" data-contact="alice">
+    <img src="alice.png" alt="Alice">
+    <span>Alice</span>
+  </div>
+
     </div>
     <!-- Right Panel: Conversation -->
     <div class="conversation-panel">
@@ -239,125 +237,147 @@
       <img src="community.png" alt="Community" class="nav-icon">
     </a>
   </div>
-
   <script>
     /* Preloaded conversation data */
     const conversations = {
-      michael: [
-        { sender: 'Michael', text: "Setting is by far the hardest" },
-        { sender: 'You', text: "I think MB is pretty tiring though" }
+      ben: [
+        { sender: "Ben", text: "Hey, ready for the game tonight?" },
+        { sender: "You", text: "Absolutely, can't wait!" }
       ],
-      jesse: [
-        { sender: 'Jesse', text: "Elderflame is the best" }
+      alice: [
+        { sender: "Alice", text: "Loved that documentary you recommended." },
+        { sender: "You", text: "Glad you liked it!" }
       ],
-      mark: [
-        { sender: 'Mark', text: "Does Invincible count?" }
-      ]
     };
-
+  
     /* Shared interests for each contact */
     const sharedInterests = {
       michael: ["Volleyball", "Coding"],
-      jesse: ["VALORANT", "Poker"],
-      mark: ["Anime", "Coding"]
+      jesse:   ["VALORANT", "Poker"],
+      mark:    ["Anime", "Coding"]
     };
-
+  
     /* Conversation starters for each interest */
     const conversationStarters = {
       "Volleyball": "What's the hardest volleyball position?",
-      "VALORANT": "Best Vandal Skin?",
-      "Poker": "What's your go-to poker strategy?",
-      "Anime": "What's the best anime of all time?",
-      "Coding": "What's the best programming language?"
+      "VALORANT":   "Best Vandal Skin?",
+      "Poker":      "What's your go-to poker strategy?",
+      "Anime":      "What's the best anime of all time?",
+      "Coding":     "What's the best programming language?"
     };
-
-    let currentContact = 'michael';
-
-    const contactItems = document.querySelectorAll('.contact-item');
-    const contactNameEl = document.getElementById('contactName');
-    const contactPicEl = document.getElementById('contactPic');
-    const sharedInterestsEl = document.getElementById('sharedInterestsText');
-    const starterEl = document.getElementById('starterText');
-    const chatMessagesEl = document.getElementById('chatMessages');
-    const messageInputEl = document.getElementById('messageInput');
-    const sendBtn = document.getElementById('sendBtn');
-
-    // Helper: Capitalize first letter
+  
+    // Helper to capitalize the first letter
     function capitalizeFirstLetter(str) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
-
-    // Load conversation for a given contact
+  
+    // Grab URL param (e.g. ?user=Jesse)
+    const urlParams = new URLSearchParams(window.location.search);
+    const param = urlParams.get('user')?.toLowerCase();
+  
+    // 1. Build a persistent list of contacts from localStorage (default to Ben & Alice)
+    let contacts = JSON.parse(localStorage.getItem("contacts")) || ["ben","alice"];
+    if (param && !contacts.includes(param)) {
+      contacts.push(param);
+      localStorage.setItem("contacts", JSON.stringify(contacts));
+    }
+  
+    // Cache DOM elements
+    const contactListEl      = document.querySelector(".contact-list");
+    const contactNameEl      = document.getElementById("contactName");
+    const contactPicEl       = document.getElementById("contactPic");
+    const sharedInterestsEl  = document.getElementById("sharedInterestsText");
+    const starterEl          = document.getElementById("starterText");
+    const chatMessagesEl     = document.getElementById("chatMessages");
+    const messageInputEl     = document.getElementById("messageInput");
+    const sendBtn            = document.getElementById("sendBtn");
+  
+    // Keep track of which contact we're viewing
+    let currentContact = param || contacts[0];
+  
+    // Render the sidebar and attach click‐listeners
+    function renderContacts() {
+      contactListEl.innerHTML = "";
+      contacts.forEach(contact => {
+        const item = document.createElement("div");
+        item.className = "contact-item";
+        item.dataset.contact = contact;
+        item.innerHTML = `
+          <img src="${contact}.png" 
+               alt="${capitalizeFirstLetter(contact)}">
+          <span>${capitalizeFirstLetter(contact)}</span>
+        `;
+        item.addEventListener("click", () => loadConversation(contact));
+        contactListEl.appendChild(item);
+      });
+    }
+  
+    // Load a conversation into the main pane
     function loadConversation(contact) {
       currentContact = contact;
-      // Update header info
+  
+      // Ensure an array exists
+      if (!conversations[contact]) conversations[contact] = [];
+  
+      // Header info
       contactNameEl.textContent = capitalizeFirstLetter(contact);
-      contactPicEl.src = contact + ".png";
-      // Update shared interests text
+      contactPicEl.src = `${contact}.png`;
+  
+      // Shared interests & starter
       if (sharedInterests[contact]) {
-        sharedInterestsEl.textContent = "Shared interests: " + sharedInterests[contact].join(", ");
-        // Pick first shared interest for conversation starter
-        let firstInterest = sharedInterests[contact][0] || "";
-        starterEl.textContent = "Conversation Starter: " + (conversationStarters[firstInterest] || "Let's chat!");
+        sharedInterestsEl.textContent = 
+          "Shared interests: " + sharedInterests[contact].join(", ");
+        const first = sharedInterests[contact][0];
+        starterEl.textContent = 
+          "Conversation Starter: " + (conversationStarters[first] || "Let's chat!");
       } else {
         sharedInterestsEl.textContent = "Shared interests: None";
         starterEl.textContent = "Conversation Starter: Let's chat!";
       }
-      // Load conversation messages
-      chatMessagesEl.innerHTML = '';
-      if (conversations[contact]) {
-        conversations[contact].forEach(message => {
-          appendMessage(message.sender, message.text);
-        });
-      }
+  
+      // Messages
+      chatMessagesEl.innerHTML = "";
+      conversations[contact].forEach(msg => {
+        appendMessage(msg.sender, msg.text);
+      });
     }
-
-    // Append a message bubble with left/right alignment
+  
+    // Append one message bubble
     function appendMessage(sender, text) {
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add('chat-message');
-      if (sender === "You") {
-        messageDiv.classList.add('message-right');
-      } else {
-        messageDiv.classList.add('message-left');
-      }
-      messageDiv.innerHTML = '<div class="message-bubble"><div class="inner-msg"><strong>' + sender + ':</strong> ' + text + '</div></div>';
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("chat-message");
+      messageDiv.classList.add(sender === "You" ? "message-right" : "message-left");
+      messageDiv.innerHTML = `
+        <div class="message-bubble">
+          <div class="inner-msg">
+            <strong>${sender}:</strong> ${text}
+          </div>
+        </div>`;
       chatMessagesEl.appendChild(messageDiv);
-      // Scroll to the bottom
       chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
     }
-
-    // Set up click listeners for each contact
-    contactItems.forEach(item => {
-      item.addEventListener('click', () => {
-        let contactId = item.getAttribute('data-contact');
-        loadConversation(contactId);
-      });
-    });
-
-    // Send message function
+  
+    // Send a new message
     function sendMessage() {
-      let text = messageInputEl.value.trim();
-      if (text !== '') {
-        if (!conversations[currentContact]) {
-          conversations[currentContact] = [];
-        }
-        conversations[currentContact].push({ sender: 'You', text: text });
-        appendMessage('You', text);
-        messageInputEl.value = '';
-      }
+      const text = messageInputEl.value.trim();
+      if (!text) return;
+      conversations[currentContact].push({ sender: "You", text });
+      appendMessage("You", text);
+      messageInputEl.value = "";
     }
-
-    sendBtn.addEventListener('click', sendMessage);
-    messageInputEl.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        sendMessage();
-      }
+  
+    // Wire up send button + Enter key
+    sendBtn.addEventListener("click", sendMessage);
+    messageInputEl.addEventListener("keydown", e => {
+      if (e.key === "Enter") sendMessage();
     });
-
-    // Load initial conversation (Michael)
+  
+    // Initial render + load
+    renderContacts();
     loadConversation(currentContact);
-
   </script>
+  
+
+
 </body>
 </html>

@@ -46,7 +46,6 @@
               <p id="editableMajor">Major(s): Computer Science</p>
               <p id="editableYear">Year: 2027</p>
               <p id="editableDorm">Dorm: The Radian</p>
-              <p>Total Clicks: <span id="click-counter">0</span></p>
             </div>
             <div class="profile-pic-wrapper">
               <img src="gabe.png" alt="Gabe's Profile Picture" class="profile-pic">
@@ -63,9 +62,10 @@
       <!-- Top Interests (Editable) -->
       <div class="rectangular-box collapsible-card">
         <div class="inner-box">
-          <button class="collapsible-header top-section-box">
-            <h3>Top Interests</h3>
-          </button>
+          <div class="collapsible-header top-section-box">
+               <h3>Top Interests</h3>
+               <span class="toggle-arrow">▶</span>
+          </div>
           <div class="collapsible-content top-section-box">
             <ul id="topInterestsList" class="circle-list"></ul>
             <input type="text" id="newInterest" placeholder="Add interest and hit Enter">
@@ -76,9 +76,10 @@
       <!-- Top Artists (Editable) -->
       <div class="rectangular-box collapsible-card">
         <div class="inner-box">
-          <button class="collapsible-header top-section-box">
+          <div class="collapsible-header top-section-box">
             <h3>Top Artists</h3>
-          </button>
+            <span class="toggle-arrow">▶</span>
+       </div>
           <div class="collapsible-content top-section-box">
             <ul id="topArtistsList" class="circle-list"></ul>
             <input type="text" id="newArtist" placeholder="Add artist and hit Enter">
@@ -89,9 +90,10 @@
       <!-- Schedule (Editable) -->
       <div class="rectangular-box collapsible-card">
         <div class="inner-box">
-          <button class="collapsible-header top-section-box">
+          <div class="collapsible-header top-section-box">
             <h3>Schedule</h3>
-          </button>
+            <span class="toggle-arrow">▶</span>
+          </div>
           <div class="collapsible-content top-section-box">
             <ul id="topScheduleList" class="circle-list"></ul>
             <input type="text" id="newSchedule" placeholder="Add course and hit Enter">
@@ -113,20 +115,23 @@
       </div>
     </div>
 
-    <!-- ===== Most Recent Matches (Already Outlined) ===== -->
-    <div class="matches-section">
-      <div class="rectangular-box">
-        <div class="inner-box">
-          <h3>Most Recent Matches</h3>
-          <!-- Match Card 1 -->
+    <div class="matches-section rectangular-box" id="matchesSection" style="display:none;">
+      <!-- This Week’s -->
+      <div id="thisWeekSection">
+        <h3>This Week’s Matches</h3>
+        <div class="matches-grid" id="thisWeekGrid">
           <div class="match-card">
             <img src="michael.png" alt="Michael's Profile" class="match-pic">
             <div class="match-info">
               <p class="match-name">Name: Michael</p>
               <p class="match-major">Major: Marketing</p>
               <p class="match-year">Year: 2025</p>
-              <p class="match-dorm">Dorm: The Quad</p>
+              <p class="match-dorm">Dorm: Quad</p>
             </div>
+            <button class="dm-btn" onclick="window.location.href = 'chat.html?user=Michael'">
+              DM
+            </button>
+
           </div>
           <!-- Match Card 2 -->
           <div class="match-card">
@@ -137,6 +142,9 @@
               <p class="match-year">Year: 2026</p>
               <p class="match-dorm">Dorm: Stouffer</p>
             </div>
+            <button class="dm-btn" onclick="window.location.href = 'chat.html?user=Jesse'">
+              DM
+            </button>
           </div>
           <!-- Match Card 3 -->
           <div class="match-card">
@@ -145,14 +153,64 @@
               <p class="match-name">Name: Mark</p>
               <p class="match-major">Major: Astrophysics</p>
               <p class="match-year">Year: 2024</p>
-              <p class="match-dorm">Dorm: Off Campus</p>
+              <p class="match-dorm">Dorm: Harnwell</p>
             </div>
+            <button class="dm-btn" onclick="window.location.href = 'chat.html?user=Mark'">
+              DM
+            </button>
+        </div>
+      </div>
+    
+      <!-- Last Week’s (hidden by default) -->
+      <div id="lastWeekSection" style="display:none; margin-top:1rem;">
+        <h3>Last Week’s Matches</h3>
+        <div class="matches-grid" id="lastWeekGrid">
+          <div class="match-card">
+            <img src="alice.png" class="match-pic" alt="Alice">
+            <div class="match-info">
+              <p class="match-name">Name: Alice</p>
+              <p class="match-major">Major: Comp Sci</p>
+              <p class="match-year">Year: 2026</p>
+              <p class="match-dorm">Dorm: Harnwell</p>
+            </div>
+            <button class="dm-btn" onclick="window.location.href = 'chat.html?user=Alice'">
+              DM
+            </button>
+          </div>
+          <div class="match-card">
+            <img src="ben.png" class="match-pic" alt="Ben">
+            <div class="match-info">
+              <p class="match-name">Name: Ben</p>
+              <p class="match-major">Major: Finance</p>
+              <p class="match-year">Year: 2025</p>
+              <p class="match-dorm">Dorm: Harrison</p>
+            </div>
+            <button class="dm-btn" onclick="window.location.href = 'chat.html?user=Ben'">
+              DM
+            </button>
+          </div>
+          <div class="match-card">
+            <img src="carla.png" class="match-pic" alt="Carla">
+            <div class="match-info">
+              <p class="match-name">Name: Carla</p>
+              <p class="match-major">Major: Biology</p>
+              <p class="match-year">Year: 2027</p>
+              <p class="match-dorm">Dorm: Lauder</p>
+            </div>
+            <button class="dm-btn" onclick="window.location.href = 'chat.html?user=Carla'">
+              DM
+            </button>
           </div>
         </div>
       </div>
-    </div>
+      <!-- toggle button to show/hide Last Week’s -->
+  <button id="toggleLastWeekBtn" class="toggle-btn" style="margin-top:1rem;">
+    View Last Week’s Matches
+  </button>
+</div>
 
-  </div>
+
+    
 
   <!-- ===== Bottom Navigation Bar ===== -->
   <div class="bottom-nav">
@@ -170,24 +228,47 @@
   <!-- ===== Scripts for Editing Mode, Update Profile Pic, and Local Storage Loading ===== -->
   <script>
     // Toggle Opt In/Opt Out (unchanged)
-    let optedIn = false;
-    const prefix = "New matches 4/19 7PM EST - ";
-    const optInText = document.getElementById("optInText");
-    const optInBtn = document.getElementById("optInBtn");
+    // ————————————————
+// OPT‑IN PERSISTENCE LOGIC
+// ————————————————
+let optedIn; 
+const prefix = "New matches 4/19 7PM EST - ";
+const optInText = document.getElementById("optInText");
+const optInBtn  = document.getElementById("optInBtn");
+const matchesSection     = document.getElementById("matchesSection");
+const toggleLastWeekBtn  = document.getElementById("toggleLastWeekBtn");
 
+// Sync UI from a Boolean
+function updateOptUI(isIn) {
+  if (isIn) {
+    optInText.textContent = prefix + "You have opted in";
+    optInBtn.textContent = "Opt Out";
+    matchesSection.style.display = "";
+    toggleLastWeekBtn.style.display = "";
+    // render if not already
+    renderThisWeekMatches("thisWeekGrid");
+    renderLastWeekMatches("lastWeekGrid");
+  } else {
     optInText.textContent = prefix + "You have not opted in yet";
     optInBtn.textContent = "Opt In";
+    matchesSection.style.display = "none";
+    toggleLastWeekBtn.style.display = "none";
+  }
+}
 
-    optInBtn.addEventListener("click", () => {
-      optedIn = !optedIn;
-      if (optedIn) {
-        optInText.textContent = prefix + "You have opted in";
-        optInBtn.textContent = "Opt Out";
-      } else {
-        optInText.textContent = prefix + "You have not opted in yet";
-        optInBtn.textContent = "Opt In";
-      }
-    });
+// On click: toggle, persist, then update UI
+optInBtn.addEventListener("click", () => {
+  optedIn = !optedIn;
+  localStorage.setItem("optedIn", optedIn);
+  updateOptUI(optedIn);
+});
+
+// On page load: read stored value (default false) and init
+document.addEventListener("DOMContentLoaded", () => {
+  optedIn = localStorage.getItem("optedIn") === "true";
+  updateOptUI(optedIn);
+});
+
 
     // Toggle editing mode for profile details
     const editBtn = document.getElementById("editBtn");
@@ -251,12 +332,16 @@
       }
     });
 
-  document.querySelectorAll('.collapsible-header').forEach(button => {
-    button.addEventListener('click', () => {
-      const content = button.nextElementSibling;
-      content.classList.toggle('show');
-    });
+    document.querySelectorAll('.toggle-arrow').forEach(arrow => {
+  arrow.addEventListener('click', e => {
+    const content = e.target
+      .closest('.collapsible-card')
+      .querySelector('.collapsible-content');
+    content.classList.toggle('show');
+    e.target.classList.toggle('open');
   });
+});
+
 
 
 
@@ -332,6 +417,57 @@ document.addEventListener("DOMContentLoaded", () => {
   setupInput("newArtist", "topArtistsList");
   setupInput("newSchedule", "topScheduleList");
 });
+
+// (A) When user Opts In, show the container and render both lists:
+document.getElementById('optInBtn').addEventListener('click', () => {
+  const section = document.getElementById('matchesSection');
+  section.style.display = '';              // reveal the whole block
+  renderThisWeekMatches('thisWeekGrid');   // your existing function, now pointed at thisWeekGrid
+  renderLastWeekMatches('lastWeekGrid');   // you’ll write this next
+});
+
+// (B) A simple renderer for our three mocks:
+function renderLastWeekMatches(containerId) {
+  const data = [
+    { name: 'Alice Chen', year: '2026', avatar: 'alice.png' },
+    { name: 'Ben Patel', year: '2025', avatar: 'ben.png' },
+    { name: 'Carla Ruiz', year: '2027', avatar: 'carla.png' }
+  ];
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';  // clear any old content
+  data.forEach(u => {
+    const card = document.createElement('div');
+    card.className = 'match-card';
+    card.innerHTML = `
+      <img src="${u.avatar}" class="match-pic" alt="${u.name}">
+      <div class="match-info">
+        <p class="match-name">Name: ${u.name}</p>
+        <p class="match-year">Year: ${u.year}</p>
+      </div>
+      <button class="dm-btn" onclick="location.href='chat.html?user=${encodeURIComponent(u.name)}'">DM</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// (C) Toggle Last Week’s on or off:
+document.getElementById('toggleLastWeekBtn').addEventListener('click', function() {
+  const lw = document.getElementById('lastWeekSection');
+  if (lw.style.display === 'none' || lw.style.display === '') {
+    lw.style.display = 'block';
+    this.textContent = 'Hide Last Week’s Matches';
+  } else {
+    lw.style.display = 'none';
+    this.textContent = 'View Last Week’s Matches';
+  }
+});
+
+// (D) OPTIONAL: Initialize button state so it doesn’t show before Opt In
+document.getElementById('toggleLastWeekBtn').style.display = 'none';
+document.getElementById('optInBtn').addEventListener('click', () => {
+  document.getElementById('toggleLastWeekBtn').style.display = '';
+});
+
 
 
 
