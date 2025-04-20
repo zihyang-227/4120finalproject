@@ -238,7 +238,12 @@
     </a>
   </div>
   <script>
-    /* Preloaded conversation data */
+    // Helper to capitalize the first letter
+    function capitalizeFirstLetter(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+  
+    // Preloaded conversation data
     const conversations = {
       ben: [
         { sender: "Ben", text: "Hey, ready for the game tonight?" },
@@ -247,17 +252,21 @@
       alice: [
         { sender: "Alice", text: "Loved that documentary you recommended." },
         { sender: "You", text: "Glad you liked it!" }
-      ],
+      ]
     };
   
-    /* Shared interests for each contact */
+    // Shared interests for each contact
     const sharedInterests = {
       michael: ["Volleyball", "Coding"],
       jesse:   ["VALORANT", "Poker"],
-      mark:    ["Anime", "Coding"]
+      mark:    ["Anime",   "Coding"],
+      ben: ["VALORANT", "Poker"],
+      alice: ["Anime", "Poker"],
+      carla: ["Coding","Volleyball"]
+
     };
   
-    /* Conversation starters for each interest */
+    // Conversation starters for each interest
     const conversationStarters = {
       "Volleyball": "What's the hardest volleyball position?",
       "VALORANT":   "Best Vandal Skin?",
@@ -266,17 +275,14 @@
       "Coding":     "What's the best programming language?"
     };
   
-    // Helper to capitalize the first letter
-    function capitalizeFirstLetter(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-  
-    // Grab URL param (e.g. ?user=Jesse)
+    // Grab and normalize URL param (e.g. ?user=Michael)
     const urlParams = new URLSearchParams(window.location.search);
-    const param = urlParams.get('user')?.toLowerCase();
+    const param     = urlParams.get('user')?.toLowerCase();
   
-    // 1. Build a persistent list of contacts from localStorage (default to Ben & Alice)
+    // 1) Build a persistent list of contacts from localStorage (default to Ben & Alice)
     let contacts = JSON.parse(localStorage.getItem("contacts")) || ["ben","alice"];
+  
+    // 2) If we arrived via DM to a new user, add them
     if (param && !contacts.includes(param)) {
       contacts.push(param);
       localStorage.setItem("contacts", JSON.stringify(contacts));
@@ -292,10 +298,10 @@
     const messageInputEl     = document.getElementById("messageInput");
     const sendBtn            = document.getElementById("sendBtn");
   
-    // Keep track of which contact we're viewing
+    // Track which contact we're viewing
     let currentContact = param || contacts[0];
   
-    // Render the sidebar and attach click‐listeners
+    // Render sidebar contacts
     function renderContacts() {
       contactListEl.innerHTML = "";
       contacts.forEach(contact => {
@@ -303,8 +309,7 @@
         item.className = "contact-item";
         item.dataset.contact = contact;
         item.innerHTML = `
-          <img src="${contact}.png" 
-               alt="${capitalizeFirstLetter(contact)}">
+          <img src="${contact}.png" alt="${capitalizeFirstLetter(contact)}">
           <span>${capitalizeFirstLetter(contact)}</span>
         `;
         item.addEventListener("click", () => loadConversation(contact));
@@ -325,11 +330,12 @@
   
       // Shared interests & starter
       if (sharedInterests[contact]) {
-        sharedInterestsEl.textContent = 
+        sharedInterestsEl.textContent =
           "Shared interests: " + sharedInterests[contact].join(", ");
         const first = sharedInterests[contact][0];
-        starterEl.textContent = 
-          "Conversation Starter: " + (conversationStarters[first] || "Let's chat!");
+        starterEl.textContent =
+          "Conversation Starter: " +
+          (conversationStarters[first] || "Let's chat!");
       } else {
         sharedInterestsEl.textContent = "Shared interests: None";
         starterEl.textContent = "Conversation Starter: Let's chat!";
@@ -346,7 +352,9 @@
     function appendMessage(sender, text) {
       const messageDiv = document.createElement("div");
       messageDiv.classList.add("chat-message");
-      messageDiv.classList.add(sender === "You" ? "message-right" : "message-left");
+      messageDiv.classList.add(
+        sender === "You" ? "message-right" : "message-left"
+      );
       messageDiv.innerHTML = `
         <div class="message-bubble">
           <div class="inner-msg">
@@ -372,7 +380,7 @@
       if (e.key === "Enter") sendMessage();
     });
   
-    // Initial render + load
+    // Initial render
     renderContacts();
     loadConversation(currentContact);
   </script>

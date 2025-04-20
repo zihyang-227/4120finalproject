@@ -151,8 +151,6 @@
             <label for="grad_yes">Yes</label>
             <input type="radio" id="grad_no" name="gradYear" value="no">
             <label for="grad_no">No</label>
-            <input type="radio" id="grad_no_pref" name="gradYear" value="no_preference" checked>
-            <label for="grad_no_pref">No Preference</label>
           </div>
         </div>
         <!-- Question 2: Interest similarity -->
@@ -216,75 +214,99 @@
   </div>
 
   <script>
-    // Basic drag-and-drop for ranking list
     let dragSrcEl = null;
-    const rankingList = document.getElementById('rankingList');
-    
-    function handleDragStart(e) {
-      dragSrcEl = this;
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', this.innerHTML);
-      this.style.opacity = '0.4';
+  const rankingList = document.getElementById('rankingList');
+
+  function handleDragStart(e) {
+    dragSrcEl = this;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+    this.style.opacity = '0.4';
+  }
+  function handleDragOver(e) {
+    if (e.preventDefault) e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+  }
+  function handleDragEnter() { this.classList.add('over'); }
+  function handleDragLeave() { this.classList.remove('over'); }
+  function handleDrop(e) {
+    if (e.stopPropagation) e.stopPropagation();
+    if (dragSrcEl !== this) {
+      // swap contents
+      dragSrcEl.innerHTML = this.innerHTML;
+      this.innerHTML    = e.dataTransfer.getData('text/html');
     }
-    
-    function handleDragOver(e) {
-      if (e.preventDefault) e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      return false;
-    }
-    
-    function handleDragEnter() {
-      this.classList.add('over');
-    }
-    
-    function handleDragLeave() {
-      this.classList.remove('over');
-    }
-    
-    function handleDrop(e) {
-      if (e.stopPropagation) e.stopPropagation();
-      if (dragSrcEl !== this) {
-        // Swap innerHTML of dragged element and drop target
-        dragSrcEl.innerHTML = this.innerHTML;
-        this.innerHTML = e.dataTransfer.getData('text/html');
+    return false;
+  }
+  function handleDragEnd() {
+    this.style.opacity = '1';
+    rankingList.querySelectorAll('li').forEach(li => li.classList.remove('over'));
+  }
+
+  // wire up existing list items
+  rankingList.querySelectorAll('li').forEach(item => {
+    item.addEventListener('dragstart', handleDragStart, false);
+    item.addEventListener('dragenter', handleDragEnter, false);
+    item.addEventListener('dragover', handleDragOver, false);
+    item.addEventListener('dragleave', handleDragLeave, false);
+    item.addEventListener('drop', handleDrop, false);
+    item.addEventListener('dragend', handleDragEnd, false);
+  });
+
+  /* ————————————————
+     SHOW/HIDE BASED ON “No” SELECTION
+     ———————————————— */
+  function updateRankingVisibility() {
+    rankingList.querySelectorAll('li').forEach(li => {
+      const text = li.querySelector('.item-text').textContent.trim();
+      let hide = false;
+
+      // if user said “No” to a factor, hide that item
+      if (text === 'Interest similarity' && document.getElementById('interest_no').checked) {
+        hide = true;
       }
-      return false;
-    }
-    
-    function handleDragEnd() {
-      this.style.opacity = '1';
-      const items = rankingList.querySelectorAll('li');
-      items.forEach(item => item.classList.remove('over'));
-    }
-    
-    const items = rankingList.querySelectorAll('li');
-    items.forEach(function(item) {
-      item.addEventListener('dragstart', handleDragStart, false);
-      item.addEventListener('dragenter', handleDragEnter, false);
-      item.addEventListener('dragover', handleDragOver, false);
-      item.addEventListener('dragleave', handleDragLeave, false);
-      item.addEventListener('drop', handleDragDrop, false);
-      item.addEventListener('drop', handleDrop, false);
-      item.addEventListener('dragend', handleDragEnd, false);
+      if (text === 'Artist/music taste similarity' && document.getElementById('artist_no').checked) {
+        hide = true;
+      }
+      if (text === 'Schedule similarity' && document.getElementById('schedule_no').checked) {
+        hide = true;
+      }
+      if (text === 'Graduation year' && document.getElementById('grad_no').checked) {
+        hide = true;
+      }
+
+      li.style.display = hide ? 'none' : '';
     });
-    
-    // Optional: Save Preferences button handler (logs current selections)
-    document.getElementById('saveBtn').addEventListener('click', function() {
-      const gradChoice = document.querySelector('input[name="gradYear"]:checked').value;
-      const interestChoice = document.querySelector('input[name="interest"]:checked').value;
-      const artistChoice = document.querySelector('input[name="artist"]:checked').value;
-      const scheduleChoice = document.querySelector('input[name="schedule"]:checked').value;
-      const ranking = [];
-      rankingList.querySelectorAll('li').forEach(li => {
-        ranking.push(li.querySelector('.item-text').textContent);
-      });
-      console.log("Graduation Year:", gradChoice);
-      console.log("Interest Similarity:", interestChoice);
-      console.log("Artist/Music Similarity:", artistChoice);
-      console.log("Schedule Similarity:", scheduleChoice);
-      console.log("Ranking:", ranking);
-      alert("Preferences saved (check console for details)!");
+  }
+
+  // attach to every radio in those four groups
+  document.querySelectorAll(
+    'input[name="interest"], input[name="artist"], ' +
+    'input[name="schedule"], input[name="gradYear"]'
+  ).forEach(radio => {
+    radio.addEventListener('change', updateRankingVisibility);
+  });
+
+  // run once on load
+  updateRankingVisibility();
+
+  /* ————————————————
+     SAVE BUTTON (unchanged)
+     ———————————————— */
+  document.getElementById('saveBtn').addEventListener('click', function() {
+    const gradChoice     = document.querySelector('input[name="gradYear"]:checked').value;
+    const interestChoice = document.querySelector('input[name="interest"]:checked').value;
+    const artistChoice   = document.querySelector('input[name="artist"]:checked').value;
+    const scheduleChoice = document.querySelector('input[name="schedule"]:checked').value;
+    const ranking = [];
+    rankingList.querySelectorAll('li').forEach(li => {
+      ranking.push(li.querySelector('.item-text').textContent);
     });
+
+    console.log({ gradChoice, interestChoice, artistChoice, scheduleChoice, ranking });
+    alert("Preferences saved! Check console for details.");
+  });
 
   </script>
 </body>
