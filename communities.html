@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Matching Preferences</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Load Italiana for headings and JetBrains Mono for text -->
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  <style>
+    /* Global resets and basic styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background-color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 70px; /* space for bottom nav */
+    }
+    /* Container with blue buffer rounded outline like the profile page */
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin-top: 20px;
+    }
+    .rectangular-box {
+      border: 2px solid black;
+      border-radius: 8px;
+      background-color: #8BA0F6;  /* Blue buffer */
+      padding: 6px;
+      margin-bottom: 20px;
+    }
+    .inner-box {
+      background-color: #fff;
+      border-radius: 6px;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-family: 'Italiana', serif;
+      font-size: 36px;
+      margin-bottom: 20px;
+      color: #444;
+    }
+    /* Style for each matching preference question */
+    .question {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .question label {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    /* Options aligned horizontally */
+    .options {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: 20px;
+      font-size: 16px;
+    }
+    .options label {
+      margin-right: 10px;
+    }
+    /* Style for the ranking list (drag-and-drop) */
+    .ranking-section {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .ranking-section label {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: block;
+    }
+    #rankingList {
+      list-style: none;
+      padding: 0;
+    }
+    #rankingList li {
+      font-size: 18px;
+      padding: 10px;
+      margin-bottom: 8px;
+      border: 2px solid #8BA0F6;
+      border-radius: 8px;
+      background-color: #fff;
+      cursor: move;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #rankingList li span.drag-handle {
+      font-size: 20px;
+      padding-left: 10px;
+      cursor: move;
+    }
+    /* Save button styling */
+    .save-btn {
+      font-size: 18px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .save-btn:hover {
+      background-color: #218838;
+    }
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 20px;
+    }
+    .nav-button {
+      text-decoration: none;
+    }
+    .nav-icon {
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Matching Preferences Header -->
+    <div class="rectangular-box">
+      <div class="inner-box">
+        <h1>Matching Preferences</h1>
+        <!-- Question 1: Graduation Year -->
+        <div class="question">
+          <label>Do you prefer someone with the same graduation year as you?</label>
+          <div class="options">
+            <input type="radio" id="grad_yes" name="gradYear" value="yes">
+            <label for="grad_yes">Yes</label>
+            <input type="radio" id="grad_no" name="gradYear" value="no">
+            <label for="grad_no">No</label>
+            <input type="radio" id="grad_no_pref" name="gradYear" value="no_preference" checked>
+            <label for="grad_no_pref">No Preference</label>
+          </div>
+        </div>
+        <!-- Question 2: Interest similarity -->
+        <div class="question">
+          <label>Do you want to factor in interest similarity in matches?</label>
+          <div class="options">
+            <input type="radio" id="interest_yes" name="interest" value="yes" checked>
+            <label for="interest_yes">Yes</label>
+            <input type="radio" id="interest_no" name="interest" value="no">
+            <label for="interest_no">No</label>
+          </div>
+        </div>
+        <!-- Question 3: Artist/Music similarity -->
+        <div class="question">
+          <label>Do you want to factor artist/music taste similarity in matches?</label>
+          <div class="options">
+            <input type="radio" id="artist_yes" name="artist" value="yes" checked>
+            <label for="artist_yes">Yes</label>
+            <input type="radio" id="artist_no" name="artist" value="no">
+            <label for="artist_no">No</label>
+          </div>
+        </div>
+        <!-- Question 4: Schedule similarity -->
+        <div class="question">
+          <label>Do you want to factor schedule similarity in matches?</label>
+          <div class="options">
+            <input type="radio" id="schedule_yes" name="schedule" value="yes" checked>
+            <label for="schedule_yes">Yes</label>
+            <input type="radio" id="schedule_no" name="schedule" value="no">
+            <label for="schedule_no">No</label>
+          </div>
+        </div>
+        <!-- Question 5: Ranking importance of match factors -->
+        <div class="ranking-section">
+          <label>Rank these based off importance of matches (drag to reorder):</label>
+          <ul id="rankingList">
+            <li draggable="true"><span class="item-text">Interest similarity</span><span class="drag-handle">≡</span></li>
+            <li draggable="true"><span class="item-text">Artist/music taste similarity</span><span class="drag-handle">≡</span></li>
+            <li draggable="true"><span class="item-text">Schedule similarity</span><span class="drag-handle">≡</span></li>
+            <li draggable="true"><span class="item-text">Graduation year</span><span class="drag-handle">≡</span></li>
+          </ul>
+        </div>
+        <!-- Save Preferences Button -->
+        <button class="save-btn" id="saveBtn">Save Preferences</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <!-- ===== Bottom Navigation Bar ===== -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-button">
+      <img src="profile.png" alt="Profile" class="nav-icon">
+    </a>
+    <a href="chat.html" class="nav-button">
+      <img src="chat.png" alt="Chat" class="nav-icon">
+    </a>
+    <a href="communities.html" class="nav-button">
+      <img src="community.png" alt="Community" class="nav-icon">
+    </a>
+  </div>
+
+  <script>
+    // Basic drag-and-drop for ranking list
+    let dragSrcEl = null;
+    const rankingList = document.getElementById('rankingList');
+    
+    function handleDragStart(e) {
+      dragSrcEl = this;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', this.innerHTML);
+      this.style.opacity = '0.4';
+    }
+    
+    function handleDragOver(e) {
+      if (e.preventDefault) e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      return false;
+    }
+    
+    function handleDragEnter() {
+      this.classList.add('over');
+    }
+    
+    function handleDragLeave() {
+      this.classList.remove('over');
+    }
+    
+    function handleDrop(e) {
+      if (e.stopPropagation) e.stopPropagation();
+      if (dragSrcEl !== this) {
+        // Swap innerHTML of dragged element and drop target
+        dragSrcEl.innerHTML = this.innerHTML;
+        this.innerHTML = e.dataTransfer.getData('text/html');
+      }
+      return false;
+    }
+    
+    function handleDragEnd() {
+      this.style.opacity = '1';
+      const items = rankingList.querySelectorAll('li');
+      items.forEach(item => item.classList.remove('over'));
+    }
+    
+    const items = rankingList.querySelectorAll('li');
+    items.forEach(function(item) {
+      item.addEventListener('dragstart', handleDragStart, false);
+      item.addEventListener('dragenter', handleDragEnter, false);
+      item.addEventListener('dragover', handleDragOver, false);
+      item.addEventListener('dragleave', handleDragLeave, false);
+      item.addEventListener('drop', handleDragDrop, false);
+      item.addEventListener('drop', handleDrop, false);
+      item.addEventListener('dragend', handleDragEnd, false);
+    });
+    
+    // Optional: Save Preferences button handler (logs current selections)
+    document.getElementById('saveBtn').addEventListener('click', function() {
+      const gradChoice = document.querySelector('input[name="gradYear"]:checked').value;
+      const interestChoice = document.querySelector('input[name="interest"]:checked').value;
+      const artistChoice = document.querySelector('input[name="artist"]:checked').value;
+      const scheduleChoice = document.querySelector('input[name="schedule"]:checked').value;
+      const ranking = [];
+      rankingList.querySelectorAll('li').forEach(li => {
+        ranking.push(li.querySelector('.item-text').textContent);
+      });
+      console.log("Graduation Year:", gradChoice);
+      console.log("Interest Similarity:", interestChoice);
+      console.log("Artist/Music Similarity:", artistChoice);
+      console.log("Schedule Similarity:", scheduleChoice);
+      console.log("Ranking:", ranking);
+      alert("Preferences saved (check console for details)!");
+    });
+
+  </script>
+</body>
+</html>

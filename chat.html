@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Load Italiana for headings and JetBrains Mono for text -->
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  <style>
+    /* Global resets and basic styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background-color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    /* Main two-column container */
+    .chat-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+    /* Left panel: contacts list */
+    .contact-list {
+      width: 250px;
+      border-right: 1px solid #ddd;
+      background-color: #fff;
+      overflow-y: auto;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid #ddd;
+    }
+    .contact-item:hover {
+      background-color: #f0f0f0;
+    }
+    .contact-item img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .contact-item span {
+      font-size: 18px;
+      color: #333;
+    }
+    /* Right panel: conversation area */
+    .conversation-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: #fff;
+      overflow: hidden;
+    }
+    /* Conversation header with contact info */
+    .conversation-header {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      background-color: #f0f0f0;
+    }
+    .conversation-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .conversation-header h2 {
+      font-family: 'Italiana', serif;
+      font-size: 24px;
+      color: #444;
+      margin: 0;
+    }
+    /* New meta area below header for shared interests and conversation starter */
+    .conversation-meta {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      background-color: #fafafa;
+      text-align: center;
+      font-size: 16px;
+    }
+    .conversation-meta p {
+      margin: 4px 0;
+    }
+    /* Chat messages area; set to ~75% of viewport height */
+    .chat-messages {
+      height: 75vh;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    /* Message bubble styling */
+    .chat-message {
+      max-width: 80%;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .chat-message .message-bubble {
+      padding: 8px;
+      border: 2px solid black;
+      border-radius: 8px;
+      background-color: #8BA0F6;
+    }
+    .chat-message .message-bubble .inner-msg {
+      background-color: #fff;
+      border-radius: 6px;
+      padding: 5px;
+      word-wrap: break-word;
+    }
+    /* Align messages based on sender */
+    .chat-message.message-left {
+      align-self: flex-start;
+      text-align: left;
+    }
+    .chat-message.message-right {
+      align-self: flex-end;
+      text-align: right;
+    }
+    /* Message input area */
+    .message-input {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      background-color: #f0f0f0;
+      margin-bottom: 100px;
+}
+
+
+    .message-input input[type="text"] {
+      flex: 1;
+      font-size: 16px;
+      padding: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .message-input button {
+      margin-left: 10px;
+      font-size: 16px;
+      padding: 8px 16px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+    }
+    .message-input button:hover {
+      background-color: #218838;
+    }
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #fff;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 20px;
+    }
+    .nav-button {
+      text-decoration: none;
+    }
+    .nav-icon {
+      width: 50px;
+      height: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <!-- Left Panel: Contact List -->
+    <div class="contact-list">
+      <div class="contact-item" data-contact="michael">
+        <img src="michael.png" alt="Michael">
+        <span>Michael</span>
+      </div>
+      <div class="contact-item" data-contact="jesse">
+        <img src="jesse.png" alt="Jesse">
+        <span>Jesse</span>
+      </div>
+      <div class="contact-item" data-contact="mark">
+        <img src="mark.png" alt="Mark">
+        <span>Mark</span>
+      </div>
+    </div>
+    <!-- Right Panel: Conversation -->
+    <div class="conversation-panel">
+      <!-- Conversation Header -->
+      <div class="conversation-header">
+        <img src="michael.png" alt="Contact Picture" id="contactPic">
+        <h2 id="contactName">Michael</h2>
+      </div>
+      <!-- Conversation Meta: Shared Interests & Conversation Starter -->
+      <div class="conversation-meta">
+        <p id="sharedInterestsText">Shared interests: </p>
+        <p id="starterText">Conversation Starter: </p>
+      </div>
+      <!-- Chat Messages Area -->
+      <div class="chat-messages" id="chatMessages">
+        <!-- Messages will be appended here -->
+      </div>
+      <!-- Message Input Area (positioned ~3/4 down via chat-messages height) -->
+      <div class="message-input">
+        <input type="text" id="messageInput" placeholder="Type your message">
+        <button id="sendBtn">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <!-- ===== Bottom Navigation Bar ===== -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-button">
+      <img src="profile.png" alt="Profile" class="nav-icon">
+    </a>
+    <a href="chat.html" class="nav-button">
+      <img src="chat.png" alt="Chat" class="nav-icon">
+    </a>
+    <a href="communities.html" class="nav-button">
+      <img src="community.png" alt="Community" class="nav-icon">
+    </a>
+  </div>
+
+  <script>
+    /* Preloaded conversation data */
+    const conversations = {
+      michael: [
+        { sender: 'Michael', text: "Setting is by far the hardest" },
+        { sender: 'You', text: "I think MB is pretty tiring though" }
+      ],
+      jesse: [
+        { sender: 'Jesse', text: "Elderflame is the best" }
+      ],
+      mark: [
+        { sender: 'Mark', text: "Does Invincible count?" }
+      ]
+    };
+
+    /* Shared interests for each contact */
+    const sharedInterests = {
+      michael: ["Volleyball", "Coding"],
+      jesse: ["VALORANT", "Poker"],
+      mark: ["Anime", "Coding"]
+    };
+
+    /* Conversation starters for each interest */
+    const conversationStarters = {
+      "Volleyball": "What's the hardest volleyball position?",
+      "VALORANT": "Best Vandal Skin?",
+      "Poker": "What's your go-to poker strategy?",
+      "Anime": "What's the best anime of all time?",
+      "Coding": "What's the best programming language?"
+    };
+
+    let currentContact = 'michael';
+
+    const contactItems = document.querySelectorAll('.contact-item');
+    const contactNameEl = document.getElementById('contactName');
+    const contactPicEl = document.getElementById('contactPic');
+    const sharedInterestsEl = document.getElementById('sharedInterestsText');
+    const starterEl = document.getElementById('starterText');
+    const chatMessagesEl = document.getElementById('chatMessages');
+    const messageInputEl = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    // Helper: Capitalize first letter
+    function capitalizeFirstLetter(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // Load conversation for a given contact
+    function loadConversation(contact) {
+      currentContact = contact;
+      // Update header info
+      contactNameEl.textContent = capitalizeFirstLetter(contact);
+      contactPicEl.src = contact + ".png";
+      // Update shared interests text
+      if (sharedInterests[contact]) {
+        sharedInterestsEl.textContent = "Shared interests: " + sharedInterests[contact].join(", ");
+        // Pick first shared interest for conversation starter
+        let firstInterest = sharedInterests[contact][0] || "";
+        starterEl.textContent = "Conversation Starter: " + (conversationStarters[firstInterest] || "Let's chat!");
+      } else {
+        sharedInterestsEl.textContent = "Shared interests: None";
+        starterEl.textContent = "Conversation Starter: Let's chat!";
+      }
+      // Load conversation messages
+      chatMessagesEl.innerHTML = '';
+      if (conversations[contact]) {
+        conversations[contact].forEach(message => {
+          appendMessage(message.sender, message.text);
+        });
+      }
+    }
+
+    // Append a message bubble with left/right alignment
+    function appendMessage(sender, text) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('chat-message');
+      if (sender === "You") {
+        messageDiv.classList.add('message-right');
+      } else {
+        messageDiv.classList.add('message-left');
+      }
+      messageDiv.innerHTML = '<div class="message-bubble"><div class="inner-msg"><strong>' + sender + ':</strong> ' + text + '</div></div>';
+      chatMessagesEl.appendChild(messageDiv);
+      // Scroll to the bottom
+      chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+    }
+
+    // Set up click listeners for each contact
+    contactItems.forEach(item => {
+      item.addEventListener('click', () => {
+        let contactId = item.getAttribute('data-contact');
+        loadConversation(contactId);
+      });
+    });
+
+    // Send message function
+    function sendMessage() {
+      let text = messageInputEl.value.trim();
+      if (text !== '') {
+        if (!conversations[currentContact]) {
+          conversations[currentContact] = [];
+        }
+        conversations[currentContact].push({ sender: 'You', text: text });
+        appendMessage('You', text);
+        messageInputEl.value = '';
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    messageInputEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    // Load initial conversation (Michael)
+    loadConversation(currentContact);
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+/* ===== Reset Styles ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background-color: #f8f8f8;
+    color: #333;
+  }
+  
+  /* ===== Main Container ===== */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center; /* Center the container's content */
+  }
+  
+  /* ===== Header Area ===== */
+  .profile-header {
+    margin-bottom: 20px;
+  }
+  
+  .profile-header h1 {
+    font-size: 24px;
+    font-weight: normal;
+    color: #444;
+  }
+  
+  /* ===== Rectangular Outline Container ===== */
+  .rectangular-box {
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: #8BA0F6;  /* Blue buffer */
+    padding: 6px;
+    margin-bottom: 20px;
+  }
+  .inner-box {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center; /* Center content within inner boxes */
+  }
+  
+  /* ===== Profile Info ===== */
+  .profile-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Stretch both columns to same height */
+    gap: 20px;
+  }
+  
+  .profile-details {
+    flex: 1;
+    text-align: center; /* Center text in profile details */
+  }
+  
+  .profile-details h2.name {
+    font-family: 'Italiana', serif;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .profile-details p {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 4px;
+  }
+  .profile-details p:last-child {
+    margin-bottom: 0;
+  }
+
+  .profile-pic {
+    width: 225px !important;
+    height: 225px !important;
+    object-fit: cover;
+  }
+  
+  .profile-pic-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .profile-pic-wrapper .update-pic-btn {
+    margin-top: 10px;
+  }
+  .profile-pic-wrapper .profile-pic {
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+  }
+  
+  /* ===== Update Profile Picture Button ===== */
+  .update-pic-btn {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+    border-radius: 4px;
+  }
+  .update-pic-btn:hover {
+    background-color: #ddd;
+  }
+  
+  /* ===== Top Sections (Interests, Artists, Schedule) ===== */
+  .top-sections {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+  .top-sections > .rectangular-box {
+    flex: 1;
+    max-width: 300px;
+  }
+  
+  .top-section-box {
+    text-align: center;
+    min-width: 250px;
+  }
+  
+  /* Section headings in Italiana and bold */
+  .top-section-box h3 {
+    font-family: 'Italiana', serif;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #444;
+  }
+  
+  /* For list items within top-section-box using the rectangular outlined style */
+  .circle-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto 10px auto;
+  }
+  .circle-list li {
+    display: block;
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: #8BA0F6;  /* Blue buffer */
+    margin: 5px auto;
+  }
+  .circle-list li span {
+    display: block;
+    background-color: #fff;  /* White inner background */
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 16px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  /* "See All" link */
+  .see-all {
+    display: inline-block;
+    margin-top: 5px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+    border: 1px solid #007bff;
+    padding: 4px 6px;
+    border-radius: 4px;
+  }
+  .see-all:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  /* ===== Opt-In Section ===== */
+  .opt-in-section {
+    text-align: center;
+  }
+  #optInText {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  #optInBtn {
+    background-color: #28a745;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  #optInBtn:hover {
+    background-color: #218838;
+  }
+  
+  /* ===== Matches Section ===== */
+  .matches-section {
+    margin-bottom: 80px;
+  }
+  .matches-section h3 {
+    font-family: 'Italiana', serif;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #444;
+    text-align: center;
+  }
+  
+  /* ----- Match Card ----- */
+  .match-card {
+    display: flex;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    align-items: center;
+    padding: 10px;
+    justify-content: center;
+  }
+  .match-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid #ccc;
+  }
+  .match-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+    width: 100%;
+    text-align: center;
+  }
+  .match-info .match-name {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .match-info .match-major {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .match-info .match-year {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .match-info .match-dorm {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .match-info p {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 0;
+    text-align: center;
+  }
+  
+  /* ===== Bottom Navigation Bar ===== */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 20px;
+  }
+  .nav-button {
+    text-decoration: none;
+  }
+  .nav-icon {
+    width: 80px !important;
+    height: 80px !important;
+  }
+
+  .bottom-nav .nav-icon {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .collapsible-header {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0;
+  }
+  
+  .collapsible-content {
+    display: none;
+  }
+  
+  .collapsible-content.show {
+    display: block;
+  }
+
+  #topArtistsList li {
+    font-size: 18px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 5px 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .drag-handle {
+    cursor: move;
+  }
+  .circle-list li {
+    font-size: 18px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 5px 0;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .drag-handle {
+    cursor: move;
+  }
+  input[type="text"] {
+    font-size: 16px;
+    margin-top: 8px;
+    width: 100%;
+    padding: 6px;
+    box-sizing: border-box;
+  }
+    
+
+  
+  
+  

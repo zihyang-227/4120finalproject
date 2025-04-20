@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Profile</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Italiana&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  <style>
+    /* Additional styling for the edit icon */
+    .edit-icon {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+    /* Optional override for profile-pic size */
+    .profile-pic {
+      width: 225px;
+      height: 225px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ===== Header ===== -->
+    <div class="profile-header">
+      <h1>Your Profile</h1>
+    </div>
+
+    <!-- ===== Profile Info with Rectangular Outline ===== -->
+    <div class="rectangular-box">
+      <div class="inner-box">
+        <div class="profile-info">
+          <div class="profile-info-container">
+            <div class="profile-details">
+              <!-- Notice the ID attributes for editing -->
+              <h2 class="name">
+                <span id="editableName">Gabe Sternberg</span>
+                <img src="edit.png" alt="Edit" id="editBtn" class="edit-icon">
+              </h2>
+              <p id="editableCollege">College: UPenn</p>
+              <p id="editableMajor">Major(s): Computer Science</p>
+              <p id="editableYear">Year: 2027</p>
+              <p id="editableDorm">Dorm: The Radian</p>
+              <p>Total Clicks: <span id="click-counter">0</span></p>
+            </div>
+            <div class="profile-pic-wrapper">
+              <img src="gabe.png" alt="Gabe's Profile Picture" class="profile-pic">
+              <button id="updatePicBtn" class="update-pic-btn">Update Profile Picture</button>
+            </div>                    
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Collapsible Top Sections (Interests, Artists, Schedule) ===== -->
+    <div class="top-sections">
+
+      <!-- Top Interests (Editable) -->
+      <div class="rectangular-box collapsible-card">
+        <div class="inner-box">
+          <button class="collapsible-header top-section-box">
+            <h3>Top Interests</h3>
+          </button>
+          <div class="collapsible-content top-section-box">
+            <ul id="topInterestsList" class="circle-list"></ul>
+            <input type="text" id="newInterest" placeholder="Add interest and hit Enter">
+          </div>
+        </div>
+      </div>
+    
+      <!-- Top Artists (Editable) -->
+      <div class="rectangular-box collapsible-card">
+        <div class="inner-box">
+          <button class="collapsible-header top-section-box">
+            <h3>Top Artists</h3>
+          </button>
+          <div class="collapsible-content top-section-box">
+            <ul id="topArtistsList" class="circle-list"></ul>
+            <input type="text" id="newArtist" placeholder="Add artist and hit Enter">
+          </div>
+        </div>
+      </div>
+    
+      <!-- Schedule (Editable) -->
+      <div class="rectangular-box collapsible-card">
+        <div class="inner-box">
+          <button class="collapsible-header top-section-box">
+            <h3>Schedule</h3>
+          </button>
+          <div class="collapsible-content top-section-box">
+            <ul id="topScheduleList" class="circle-list"></ul>
+            <input type="text" id="newSchedule" placeholder="Add course and hit Enter">
+          </div>
+        </div>
+      </div>
+    
+    </div>
+    
+
+
+    <!-- ===== Opt-In Section with Rectangular Outline ===== -->
+    <div class="rectangular-box">
+      <div class="inner-box">
+        <div class="opt-in-section">
+          <p id="optInText">New matches 4/19 7PM EST - You have not opted in yet</p>
+          <button id="optInBtn">Opt In</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Most Recent Matches (Already Outlined) ===== -->
+    <div class="matches-section">
+      <div class="rectangular-box">
+        <div class="inner-box">
+          <h3>Most Recent Matches</h3>
+          <!-- Match Card 1 -->
+          <div class="match-card">
+            <img src="michael.png" alt="Michael's Profile" class="match-pic">
+            <div class="match-info">
+              <p class="match-name">Name: Michael</p>
+              <p class="match-major">Major: Marketing</p>
+              <p class="match-year">Year: 2025</p>
+              <p class="match-dorm">Dorm: The Quad</p>
+            </div>
+          </div>
+          <!-- Match Card 2 -->
+          <div class="match-card">
+            <img src="jesse.png" alt="Jesse's Profile" class="match-pic">
+            <div class="match-info">
+              <p class="match-name">Name: Jesse</p>
+              <p class="match-major">Major: Chemistry</p>
+              <p class="match-year">Year: 2026</p>
+              <p class="match-dorm">Dorm: Stouffer</p>
+            </div>
+          </div>
+          <!-- Match Card 3 -->
+          <div class="match-card">
+            <img src="mark.png" alt="Mark's Profile" class="match-pic">
+            <div class="match-info">
+              <p class="match-name">Name: Mark</p>
+              <p class="match-major">Major: Astrophysics</p>
+              <p class="match-year">Year: 2024</p>
+              <p class="match-dorm">Dorm: Off Campus</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== Bottom Navigation Bar ===== -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-button">
+      <img src="profile.png" alt="Profile" class="nav-icon">
+    </a>
+    <a href="chat.html" class="nav-button">
+      <img src="chat.png" alt="Chat" class="nav-icon">
+    </a>
+    <a href="communities.html" class="nav-button">
+      <img src="community.png" alt="Community" class="nav-icon">
+    </a>
+  </div>
+
+  <!-- ===== Scripts for Editing Mode, Update Profile Pic, and Local Storage Loading ===== -->
+  <script>
+    // Toggle Opt In/Opt Out (unchanged)
+    let optedIn = false;
+    const prefix = "New matches 4/19 7PM EST - ";
+    const optInText = document.getElementById("optInText");
+    const optInBtn = document.getElementById("optInBtn");
+
+    optInText.textContent = prefix + "You have not opted in yet";
+    optInBtn.textContent = "Opt In";
+
+    optInBtn.addEventListener("click", () => {
+      optedIn = !optedIn;
+      if (optedIn) {
+        optInText.textContent = prefix + "You have opted in";
+        optInBtn.textContent = "Opt Out";
+      } else {
+        optInText.textContent = prefix + "You have not opted in yet";
+        optInBtn.textContent = "Opt In";
+      }
+    });
+
+    // Toggle editing mode for profile details
+    const editBtn = document.getElementById("editBtn");
+    const editableElements = [
+      document.getElementById("editableName"),
+      document.getElementById("editableCollege"),
+      document.getElementById("editableMajor"),
+      document.getElementById("editableYear"),
+      document.getElementById("editableDorm")
+    ];
+
+    let isEditing = false;
+
+    editBtn.addEventListener("click", () => {
+      isEditing = !isEditing;
+      editableElements.forEach(elem => {
+        elem.contentEditable = isEditing ? "true" : "false";
+        elem.style.border = isEditing ? "1px dashed #ccc" : "none";
+      });
+    });
+
+    // Update profile picture to "updated.png" on click
+    document.getElementById("updatePicBtn").addEventListener("click", function(){
+        document.querySelector(".profile-pic").src = "updated.png";
+    });
+
+    // Load persistent data (if available) from localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+      const interestsData = JSON.parse(localStorage.getItem('interests'));
+      const artistsData = JSON.parse(localStorage.getItem('artists'));
+      const scheduleData = JSON.parse(localStorage.getItem('schedule'));
+
+      if(interestsData && interestsData.length > 0){
+        const list = document.getElementById("topInterestsList");
+        list.innerHTML = "";
+        interestsData.forEach(item => {
+          const li = document.createElement("li");
+          li.innerHTML = "<span>" + item + "</span>";
+          list.appendChild(li);
+        });
+      }
+
+      if(artistsData && artistsData.length > 0){
+        const list = document.getElementById("topArtistsList");
+        list.innerHTML = "";
+        artistsData.forEach(item => {
+          const li = document.createElement("li");
+          li.innerHTML = "<span>" + item + "</span>";
+          list.appendChild(li);
+        });
+      }
+
+      if(scheduleData && scheduleData.length > 0){
+        const list = document.getElementById("topScheduleList");
+        list.innerHTML = "";
+        scheduleData.forEach(item => {
+          const li = document.createElement("li");
+          li.innerHTML = "<span>" + item + "</span>";
+          list.appendChild(li);
+        });
+      }
+    });
+
+  document.querySelectorAll('.collapsible-header').forEach(button => {
+    button.addEventListener('click', () => {
+      const content = button.nextElementSibling;
+      content.classList.toggle('show');
+    });
+  });
+
+
+
+// changes to editing part
+
+  function createItem(name) {
+  const li = document.createElement("li");
+  li.innerHTML = `<span class="item-text">${name}</span><span class="drag-handle">≡</span>`;
+  li.setAttribute("draggable", "true");
+  addDnDHandlers(li);
+  return li;
+}
+
+function addDnDHandlers(li) {
+  li.addEventListener("dragstart", function (e) {
+    dragSrcEl = this;
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", this.innerHTML);
+  });
+
+  li.addEventListener("dragover", function (e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  });
+
+  li.addEventListener("drop", function (e) {
+    if (dragSrcEl !== this) {
+      dragSrcEl.innerHTML = this.innerHTML;
+      this.innerHTML = e.dataTransfer.getData("text/html");
+      addDnDHandlers(this);
+      addDnDHandlers(dragSrcEl);
+      saveAll();
+    }
+  });
+
+  li.addEventListener("dragend", () => {
+    saveAll();
+  });
+}
+
+function loadList(listId, defaultItems) {
+  const list = document.getElementById(listId);
+  list.innerHTML = "";
+  defaultItems.forEach(name => list.appendChild(createItem(name)));
+}
+
+
+function setupInput(inputId, listId, key) {
+  const input = document.getElementById(inputId);
+  const list = document.getElementById(listId);
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const val = input.value.trim();
+      if (val !== "") {
+        list.appendChild(createItem(val));
+        input.value = "";
+        saveList(key, listId);
+      }
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  dragSrcEl = null;
+
+  // Always load default values (no memory persistence)
+  loadList("topInterestsList", ["Volleyball", "VALORANT", "Anime", "Poker", "Coding"]);
+  loadList("topArtistsList", ["Taylor Swift", "beabadoobee", "Kendrick Lamar", "The Marias", "NIKI"]);
+  loadList("topScheduleList", ["CIS 2620", "CIS 4120", "PHYS 0151", "MEAM 1010", "STAT 4310"]);
+
+  // Set up inputs (optional: you can also disable user edits entirely if needed)
+  setupInput("newInterest", "topInterestsList");
+  setupInput("newArtist", "topArtistsList");
+  setupInput("newSchedule", "topScheduleList");
+});
+
+
+
+
+  </script>
+</body>
+</html>
+
+
